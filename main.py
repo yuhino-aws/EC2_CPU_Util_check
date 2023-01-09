@@ -2,8 +2,6 @@ import boto3
 from time import sleep
 import time
 
-
-
 # キューの名前を指定して
 name = 'cm-test-queue'
 sqs = boto3.resource('sqs')
@@ -15,7 +13,7 @@ end = start + duration # forループの開始時間＋forループの実行時�
 sleep_time = 5
 
 while time.time() <= end: 
-    print("running")
+    #print("running")
     while True:
         # メッセージを取得
         msg_list = queue.receive_messages(MaxNumberOfMessages=1)
