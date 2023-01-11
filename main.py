@@ -1,6 +1,8 @@
 import boto3
 from time import sleep
 import time
+import json
+import re
 
 # キューの名前を指定して
 name = 'cm-test-queue'
@@ -19,8 +21,12 @@ while time.time() <= end:
         msg_list = queue.receive_messages(MaxNumberOfMessages=1)
         if msg_list:
             for message in msg_list:
-                #print(message.body["Message"])
-                print(message.body)
+                queue_message = json.loads(message.body)
+                utilization_str = queue_message['Message']
+                utilization_array = utilization_str.split()
+                utilization = (10000 - int(re.sub(r'\D', '',utilization_array[7])))/100
+                print(utilization)
+                #print(queue_message)
                 message.delete()
                 sleep(sleep_time)
         else:
