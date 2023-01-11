@@ -2,7 +2,7 @@ import boto3
 from time import sleep
 import time
 import json
-import re
+from decimal import Decimal
 
 # キューの名前を指定して
 name = 'cm-test-queue'
@@ -24,9 +24,9 @@ while time.time() <= end:
                 queue_message = json.loads(message.body)
                 utilization_str = queue_message['Message']
                 utilization_array = utilization_str.split()
-                utilization = (10000 - int(re.sub(r'\D', '',utilization_array[7])))/100
+                idle = utilization_array[7].replace('\n','')
+                utilization = Decimal("100.00") - Decimal(idle)
                 print(utilization)
-                #print(queue_message)
                 message.delete()
                 sleep(sleep_time)
         else:
